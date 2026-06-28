@@ -1,0 +1,60 @@
+# Redrob Hackathon — Submission Metadata
+# Fill in EVERY field before submitting on the portal
+
+team_name: "HireSignal"
+
+primary_contact:
+  name: "Najma Begum"
+  email: "your@email.com"          # ← FILL IN
+  phone: "+91-XXXXXXXXXX"          # ← FILL IN
+
+team_members:
+  - name: "Najma Begum"
+    email: "your@email.com"        # ← FILL IN
+    role: "ML Engineer"
+
+github_repo: "https://github.com/YOURUSERNAME/hiresignal"   # ← FILL IN
+
+sandbox_link: "https://huggingface.co/spaces/YOURUSERNAME/hiresignal"  # ← FILL IN
+
+reproduce_command: "python rank.py --candidates ./data/candidates.jsonl.gz --out ./submission.csv"
+
+compute:
+  platform: "Windows PC / Laptop"
+  cpu_cores: 4
+  ram_gb: 16
+  python_version: "3.11"
+  os: "Windows 11"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: true
+  pre_computation_time_minutes: 10    # embedding model download + first run
+
+ai_tools_used:
+  - "Claude"
+  - "Cursor / Antigravity"
+
+ai_usage_summary: |
+  Used Claude for architectural design, code review, and generating
+  the initial pipeline structure. All scoring logic, honeypot detection,
+  and reasoning generation were built and verified by the team.
+  No candidate data was fed to any external LLM.
+  The ranking step runs fully offline with no API calls.
+
+methodology_summary: |
+  Multi-signal candidate ranking pipeline for the Senior AI Engineer JD.
+  Stage 1: BGE-Large embeddings + FAISS ANN search narrows 100K candidates
+  to 2000 semantically relevant ones. Stage 2: Multi-signal scoring across
+  4 dimensions — skill match (weighted by proficiency + assessment scores),
+  career trajectory (YoE fit, progression rate, industry depth), behavioral
+  signals (23 Redrob signals including recency, open-to-work, GitHub, response
+  rate), and education tier. Stage 3: Cross-encoder reranking of top-300.
+  Honeypot detection removes impossible profiles before scoring.
+  Runs fully offline on CPU in < 5 minutes.
+
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true

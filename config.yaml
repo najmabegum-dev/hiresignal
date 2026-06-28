@@ -1,0 +1,126 @@
+# HireSignal — Configuration
+# Edit weights here to tune scoring without touching code
+
+model:
+  embedding_model: "BAAI/bge-large-en-v1.5"
+  reranker_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
+pipeline:
+  # Stage 1: how many candidates to retrieve from FAISS semantic search
+  top_k_semantic: 2000
+  # Stage 2: how many go into cross-encoder reranker
+  top_k_rerank: 300
+  # Final output size — MUST be 100 for submission
+  top_k_final: 100
+  # Batch size for embedding (reduce if RAM < 16GB)
+  embed_batch_size: 32
+
+weights:
+  # Skill match score (semantic + explicit skill overlap)
+  skill_match: 0.45
+  # Career trajectory (progression, depth, company quality)
+  career: 0.25
+  # Behavioral signals (activity, engagement, availability)
+  behavioral: 0.20
+  # Education tier bonus
+  education: 0.10
+
+# JD-specific required signals — tune per role
+jd:
+  required_yoe_min: 5
+  required_yoe_max: 9
+  preferred_industries:
+    - "AI/ML"
+    - "SaaS"
+    - "Product"
+    - "Fintech"
+    - "Food Delivery"
+    - "Transportation"
+    - "E-commerce"
+    - "Healthtech"
+    - "IT Services"
+  location_bonus_cities:
+    - "Pune"
+    - "Noida"
+    - "Bengaluru"
+    - "Bangalore"
+    - "Mumbai"
+    - "Hyderabad"
+    - "Delhi"
+    - "Gurgaon"
+    - "Chennai"
+
+# Core required skills from JD — any match boosts score
+core_skills:
+  must_have:
+    - "embeddings"
+    - "sentence transformers"
+    - "sentence-transformers"
+    - "bge"
+    - "e5"
+    - "faiss"
+    - "pinecone"
+    - "weaviate"
+    - "qdrant"
+    - "milvus"
+    - "opensearch"
+    - "elasticsearch"
+    - "vector"
+    - "retrieval"
+    - "ranking"
+    - "information retrieval"
+    - "ndcg"
+    - "learning to rank"
+    - "recommendation"
+    - "nlp"
+    - "natural language processing"
+  good_to_have:
+    - "pytorch"
+    - "tensorflow"
+    - "transformers"
+    - "hugging face"
+    - "hugging face transformers"
+    - "fine-tuning"
+    - "fine-tuning llms"
+    - "lora"
+    - "qlora"
+    - "rag"
+    - "llm"
+    - "large language models"
+    - "generative ai"
+    - "mlops"
+    - "mlflow"
+    - "python"
+    - "hybrid search"
+    - "semantic search"
+    - "re-ranking"
+    - "reranking"
+    - "cross-encoder"
+    - "bm25"
+    - "search"
+    - "a/b testing"
+    - "machine learning"
+    - "deep learning"
+    - "scikit-learn"
+  disqualifying_titles:
+    - "accountant"
+    - "civil engineer"
+    - "mechanical engineer"
+    - "hr manager"
+    - "marketing manager"
+    - "sales"
+    - "finance"
+    - "supply chain"
+    - "procurement"
+    - "legal"
+
+honeypot:
+  # Candidates with 2+ flags are excluded entirely
+  exclude_threshold: 2
+  # Candidates with 1 flag get score capped
+  single_flag_cap: 0.40
+
+paths:
+  cache_dir: ".cache/"
+  data_dir: "data/"
+  output_dir: "output/"
