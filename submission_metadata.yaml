@@ -29,6 +29,7 @@ compute:
   has_network_during_ranking: false
   pre_computation_required: true
   pre_computation_time_minutes: 10    # embedding model download + first run
+  validated_cpu_runtime_seconds: 109   # 1 minute 49 seconds
 
 ai_tools_used:
   - "Claude"

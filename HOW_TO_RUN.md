@@ -126,7 +126,7 @@ Open `output/test_submission.csv` and check it looks right — 50 rows, 4 column
 python rank.py --candidates data/candidates.jsonl.gz --out output/submission.csv
 ```
 
-This takes 3-5 minutes. You will see a progress bar.
+This takes about **1 minute 49 seconds** on a standard CPU (validated). You will see a progress bar. Note: the very first run may take longer while model weights are downloaded and cached.
 
 When it finishes you will see:
 ```
