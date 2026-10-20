@@ -1,61 +1,53 @@
-# Redrob Hackathon — Submission Metadata
-# Fill in EVERY field before submitting on the portal
+# HireSignal — Submission Metadata (corrected to match measured results)
 
 team_name: "HireSignal"
 
 primary_contact:
   name: "Najma Begum"
-  email: "your@email.com"          # ← FILL IN
-  phone: "+91-XXXXXXXXXX"          # ← FILL IN
+  contact: "https://github.com/najmabegum-dev"   # email and phone intentionally omitted from public repo
 
 team_members:
   - name: "Najma Begum"
-    email: "your@email.com"        # ← FILL IN
-    role: "ML Engineer"
+    role: "ML Engineer (solo)"
 
-github_repo: "https://github.com/YOURUSERNAME/hiresignal"   # ← FILL IN
+github_repo: "https://github.com/najmabegum-dev/hiresignal"
+sandbox_link: null   # no hosted demo exists
 
-sandbox_link: "https://huggingface.co/spaces/YOURUSERNAME/hiresignal"  # ← FILL IN
-
-reproduce_command: "python rank.py --candidates ./data/candidates.jsonl.gz --out ./submission.csv"
+reproduce_command: "python rank.py --candidates data/candidates.jsonl --out output/submission.csv"
 
 compute:
-  platform: "Windows PC / Laptop"
-  cpu_cores: 4
-  ram_gb: 16
-  python_version: "3.11"
-  os: "Windows 11"
-  uses_gpu_for_inference: false
-  has_network_during_ranking: false
+  platform: "Google Colab (free tier)"
+  cpu: "AMD EPYC 7B12, 2 vCPUs"
+  ram_gb: 12
+  python_version: "3.12"
+  os: "Linux (Colab)"
+  embedding_cache_built_on_gpu: true      # Tesla T4, full embedding run ~97 min
+  ranking_stage_uses_gpu: false           # warm-cache timed run was CPU-only
+  has_network_during_ranking: true        # HuggingFace Hub checks appear in logs unless HF_HUB_OFFLINE=1
   pre_computation_required: true
-  pre_computation_time_minutes: 10    # embedding model download + first run
-  validated_cpu_runtime_seconds: 109   # 1 minute 49 seconds
+  pre_computation_time_minutes_gpu: 97    # T4 GPU, full 100K embedding
+  pre_computation_time_minutes_cpu_cold: 143   # projected from 2.81 s/batch x 3125 batches
+  runtime_seconds_warm_cache_cpu: 109     # embeddings loaded from .cache/*.npy
+  runtime_seconds_warm_cache_gpu: 82
+  cache_included_in_repo: false
 
 ai_tools_used:
   - "Claude"
   - "Cursor / Antigravity"
 
 ai_usage_summary: |
-  Used Claude for architectural design, code review, and generating
-  the initial pipeline structure. All scoring logic, honeypot detection,
-  and reasoning generation were built and verified by the team.
-  No candidate data was fed to any external LLM.
-  The ranking step runs fully offline with no API calls.
+  Used Claude for architectural discussion, debugging guidance, and code
+  review. Scoring logic, honeypot rules, and final decisions were made and
+  verified by me. No candidate data was sent to any external LLM; the
+  ranking pipeline makes no API calls.
 
 methodology_summary: |
-  Multi-signal candidate ranking pipeline for the Senior AI Engineer JD.
-  Stage 1: BGE-Large embeddings + FAISS ANN search narrows 100K candidates
-  to 2000 semantically relevant ones. Stage 2: Multi-signal scoring across
-  4 dimensions — skill match (weighted by proficiency + assessment scores),
-  career trajectory (YoE fit, progression rate, industry depth), behavioral
-  signals (23 Redrob signals including recency, open-to-work, GitHub, response
-  rate), and education tier. Stage 3: Cross-encoder reranking of top-300.
-  Honeypot detection removes impossible profiles before scoring.
-  Runs fully offline on CPU in < 5 minutes.
+  Stage 1: BGE-Large embeddings + FAISS retrieval narrow 100K candidates to
+  2,000. Stage 2: 4-signal scoring (skills, career, behavioral, education)
+  with honeypot detection and capping. Stage 3: cross-encoder reranking of
+  the top 300. Stage 4: template-based reasoning, no LLM calls.
+  Note: a BGE-small pre-filter exists in src/fast_filter.py but is not wired
+  into rank.py.
 
 declarations:
-  read_submission_spec: true
-  code_is_original_work: true
-  no_collusion: true
-  honeypot_check_done: true
-  reproduction_tested: true
+  reproduction_tested: "warm-cache only; cold-start CPU run exceeded 5 minutes"
