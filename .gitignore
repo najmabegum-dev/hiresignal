@@ -10,3 +10,5 @@ data/candidates.jsonl.gz
 .env
 
 *.lnk
+*.code-workspace
+.vscode/
