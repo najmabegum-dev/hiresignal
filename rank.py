@@ -334,6 +334,9 @@ def main() -> None:
         scored_results.sort(key=lambda x: x["score"], reverse=True)
 
     # ── Stage 4: Take top 100 + add reasoning ─────────────────────────
+    for r in scored_results:
+        r["score"] = round(r["score"], 4)
+    scored_results.sort(key=lambda x: (-x["score"], x["candidate_id"]))
     top100 = scored_results[:100]
     for i, r in enumerate(top100):
         r["rank"] = i + 1
