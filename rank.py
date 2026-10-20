@@ -7,20 +7,18 @@ HireSignal — India Runs Track 1 submission entrypoint.
 Produces the ranked top-100 CSV from the hackathon dataset.
 
 Usage:
-    python rank.py --candidates data/candidates.jsonl.gz --out submission.csv
+    python rank.py --candidates data/candidates.jsonl --out output/submission.csv
     python rank.py --candidates data/sample_candidates.json --out output/test.csv --sample
 
-Runs fully offline during the ranking stage (no API calls). The pipeline
-requires network access on the very first run to download and cache
-open-source Hugging Face model weights; once cached, subsequent ranking
-runs execute fully offline.
+Pipeline: BGE-Large + FAISS semantic retrieval -> 4-signal scoring with honeypot
+detection -> cross-encoder reranking -> template-based reasoning.
 
-Validated runtime: full 100,000 candidate run completes in **1 minute 49 seconds**
-(109s) on the reference CPU hardware used during validation. This meets the
-challenge constraints (CPU-only, under 5 minutes, offline during ranking
-after initial caching).
+Measured runtime on 100,000 candidates:
+  - Warm embedding cache (.cache/*.npy present): ~1m49s on Colab CPU, ~82s on T4 GPU
+  - Cold CPU, no cache: embedding alone was projected at ~2h20m (BGE-Large, 2 vCPU)
+The embedding cache is NOT stored in this repository, so a fresh clone starts
+cold. Network access is needed on the first run to download model weights.
 """
-
 import argparse
 import csv
 import logging
