@@ -125,15 +125,10 @@ def run_semantic_stage(
 
     engine = EmbeddingEngine(cfg["embedding_model"], cache_dir=cache_dir)
 
-    # Build cache key from file hash
-    try:
-        from src.embeddings import _file_hash
-        cache_key = f"candidates_{_file_hash(candidates_path)}"
-    except Exception:
-        cache_key = None
-
-    # Embed all candidates
+    # Embed all candidates. The cache key comes from the texts themselves,
+    # so it is identical for .jsonl and .jsonl.gz inputs.
     texts = [build_candidate_text(f) for f in flat_candidates]
+    cache_key = texts_cache_key(texts, cfg["embedding_model"])
     candidate_embeddings = engine.embed_batch(texts, batch_size=batch_size, cache_key=cache_key)
 
     # Build FAISS index
