@@ -77,8 +77,12 @@ def save_csv(results: list[dict], output_path: str) -> None:
     """Save exactly 100 rows in the required format, validated."""
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Sort by score descending, assign ranks 1-100
-    results.sort(key=lambda x: x["score"], reverse=True)
+       # Sort by rounded score (descending), then candidate_id (ascending).
+    # Rounding first matters: the CSV stores 4 decimals, so ties must be
+    # judged on the same rounded value the validator sees.
+    for r in results:
+        r["score"] = round(r["score"], 4)
+    results.sort(key=lambda x: (-x["score"], x["candidate_id"]))
     for i, r in enumerate(results):
         r["rank"] = i + 1
 
