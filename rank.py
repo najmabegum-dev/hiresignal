@@ -92,9 +92,6 @@ def save_csv(results: list[dict], output_path: str) -> None:
             logger.warning("Score ordering issue at rank %d — fixing…", i + 1)
             # Already sorted, this shouldn't happen
 
-    # Tie-break: equal scores → sort by candidate_id ascending
-    # (already handled by stable sort + candidate_id as secondary)
-
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["candidate_id", "rank", "score", "reasoning"])
