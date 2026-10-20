@@ -114,7 +114,7 @@ def run_semantic_stage(
     Stage 1: Use BGE embeddings + FAISS to narrow 100K → top 2000.
     Returns list of indices into flat_candidates.
     """
-    from src.embeddings import EmbeddingEngine, build_candidate_text
+    from src.embeddings import EmbeddingEngine, build_candidate_text, texts_cache_key
 
     cfg = config["model"]
     top_k = config["pipeline"]["top_k_semantic"]
