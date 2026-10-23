@@ -287,7 +287,7 @@ class CandidateScorer:
         """
         # 1. Recency — when did they last log in?
         last_active = _parse_date(flat.get("last_active_date", "2020-01-01"))
-        days_ago = (date.today() - last_active).days
+        days_ago = (ref_today() - last_active).days
         if days_ago <= 7:
             recency = 1.0
         elif days_ago <= 30:
