@@ -13,7 +13,7 @@ in the redrob_signals_doc and submission_spec.
 import logging
 from datetime import date, datetime
 from typing import Any
-
+from src.refdate import today as ref_today
 logger = logging.getLogger(__name__)
 
 
@@ -71,7 +71,7 @@ def get_honeypot_flags(flat: dict[str, Any], raw: dict[str, Any]) -> list[str]:
     # ── Flag 5: Perfect completeness + completely inactive ─────────────
     completeness = sig.get("profile_completeness_score", 0)
     last_active = _parse_date(sig.get("last_active_date", "2020-01-01"))
-    days_inactive = (date.today() - last_active).days
+    days_inactive = (ref_today() - last_active).days
     apps_30d = sig.get("applications_submitted_30d", 0)
     if completeness >= 99 and days_inactive > 180 and apps_30d == 0:
         flags.append("perfect_but_completely_inactive")
