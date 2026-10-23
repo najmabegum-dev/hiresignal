@@ -17,7 +17,7 @@ import logging
 import math
 from datetime import date, datetime
 from typing import Any
-
+from src.refdate import today as ref_today
 logger = logging.getLogger(__name__)
 
 # Proficiency multipliers — expert skills count more
