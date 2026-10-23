@@ -295,6 +295,9 @@ def main() -> None:
     # ── Flatten ───────────────────────────────────────────────────────
     print(Fore.CYAN + "\n→ Flattening candidate schemas…" + Style.RESET_ALL)
     flat_candidates = [flatten_candidate(c) for c in tqdm(raw_candidates, desc="Flattening")]
+    from src.refdate import set_reference_date_from
+    ref_date = set_reference_date_from(f.get("last_active_date") for f in flat_candidates)
+    print(Fore.GREEN + f"  Reference date (latest last_active in data): {ref_date}" + Style.RESET_ALL)
 
     # ── Stage 1: Semantic retrieval ────────────────────────────────────
     if args.sample or len(raw_candidates) <= 200:
